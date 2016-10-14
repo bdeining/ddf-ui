@@ -29,7 +29,7 @@
 
         <AD description="Set the hostname of the mail server."
             name="Mail Server" id="mailHost" required="true" type="String"
-            default="connexta-com.mail.protection.outlook.com"/>
+            default="example.mail.protection.outlook.com"/>
 
         <AD description="Set the 'from' email address."
             name="From Address" id="fromEmail" required="true" type="String"

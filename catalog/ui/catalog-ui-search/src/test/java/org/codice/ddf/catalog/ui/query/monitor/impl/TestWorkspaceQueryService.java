@@ -99,7 +99,7 @@ public class TestWorkspaceQueryService {
         when(filterBuilder.anyOf(Mockito.any(Filter.class))).thenReturn(mock(Or.class));
         when(filterBuilder.allOf(Mockito.<Filter>anyVararg())).thenReturn(mock(And.class));
 
-        WorkspaceQueryService workspaceQueryService = new WorkspaceQueryService(
+        WorkspaceQueryServiceImpl workspaceQueryServiceImpl = new WorkspaceQueryServiceImpl(
                 queryUpdateSubscriber,
                 workspaceService,
                 catalogFramework,
@@ -147,7 +147,7 @@ public class TestWorkspaceQueryService {
 
         when(catalogFramework.query(any())).thenReturn(queryResponse);
 
-        workspaceQueryService.setSubject(new Subject() {
+        workspaceQueryServiceImpl.setSubject(new Subject() {
             @Override
             public boolean isGuest() {
                 return false;
@@ -321,7 +321,7 @@ public class TestWorkspaceQueryService {
             }
         });
 
-        workspaceQueryService.run();
+        workspaceQueryServiceImpl.run();
 
         ArgumentCaptor<Map> argumentCaptor = ArgumentCaptor.forClass(Map.class);
         verify(queryUpdateSubscriber).notify(argumentCaptor.capture());

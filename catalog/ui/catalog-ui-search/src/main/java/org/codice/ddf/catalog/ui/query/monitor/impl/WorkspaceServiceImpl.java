@@ -127,6 +127,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public List<QueryMetacardImpl> getQueryMetacards(WorkspaceMetacardImpl workspaceMetacard) {
+
+        LOGGER.debug("{}", workspaceMetacard.getQueries().toString());
+
         return workspaceMetacard.getQueries()
                 .stream()
                 .map(workspaceTransformer::toMetacardFromXml)

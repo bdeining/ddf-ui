@@ -91,6 +91,7 @@ public class EmailNotifier implements QueryUpdateSubscriber {
     @SuppressWarnings("unused")
     public void setMailHost(String mailHost) {
         notBlank(mailHost, "mailHost must be non-blank");
+        LOGGER.debug("Setting mailHost : {}", mailHost);
         this.mailHost = mailHost.trim();
     }
 
@@ -102,6 +103,7 @@ public class EmailNotifier implements QueryUpdateSubscriber {
     @SuppressWarnings("unused")
     public void setBodyTemplate(String bodyTemplate) {
         notNull(bodyTemplate, "bodyTemplate must be non-null");
+        LOGGER.debug("Setting bodyTemplate : {}", bodyTemplate);
         this.bodyTemplate = bodyTemplate;
     }
 
@@ -113,6 +115,7 @@ public class EmailNotifier implements QueryUpdateSubscriber {
     @SuppressWarnings("unused")
     public void setSubjectTemplate(String subjectTemplate) {
         notNull(subjectTemplate, "subjectTemplate must be non-null");
+        LOGGER.debug("Setting subjectTemplate : {}", subjectTemplate);
         this.subjectTemplate = subjectTemplate;
     }
 
@@ -124,12 +127,15 @@ public class EmailNotifier implements QueryUpdateSubscriber {
     @SuppressWarnings("unused")
     public void setFromEmail(String fromEmail) {
         notBlank(fromEmail, "fromEmail must be non-blank");
+        LOGGER.debug("Setting fromEmail : {}", fromEmail);
         this.fromEmail = fromEmail.trim();
     }
 
     @Override
     public void notify(Map<String, Pair<WorkspaceMetacardImpl, Long>> workspaceMetacardMap) {
         notNull(workspaceMetacardMap, "workspaceMetacardMap must be non-null");
+
+        LOGGER.debug("Workspace Metacard Map : {} {}", workspaceMetacardMap, workspaceMetacardMap.values().toString());
 
         workspaceMetacardMap.values()
                 .forEach(pair -> sendEmailsForWorkspace(pair.getLeft(), pair.getRight()));
@@ -157,11 +163,13 @@ public class EmailNotifier implements QueryUpdateSubscriber {
 
             mimeMessage.setFrom(new InternetAddress(fromEmail));
 
-            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("benjamin.deininger@connexta.com"));
 
             mimeMessage.setSubject(subject);
 
             mimeMessage.setText(emailBody);
+
+            LOGGER.debug("Attempting to send email to mailHost", mailHost);
 
             Transport.send(mimeMessage);
 
@@ -175,6 +183,7 @@ public class EmailNotifier implements QueryUpdateSubscriber {
         Properties properties = System.getProperties();
 
         properties.setProperty(SMTP_HOST_PROPERTY, mailHost);
+        properties.setProperty("mail.smtp.auth", "false");
 
         return properties;
     }
